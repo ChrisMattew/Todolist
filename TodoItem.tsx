@@ -15,7 +15,7 @@ const TodoItem = ({ todo, handleRemove, handleUpdateSubmit }: Props) => {
   const handleUndoChanges = () => {
     setContent(todo.name);
   };
-
+  console.log(`render TodoItem ${todo.key}`);
   return (
     <div style={{ marginBottom: 5, display: 'flex', gap: 5 }}>
       <input id={todo.key} value={content} onChange={handleUpdateChange} />
@@ -35,4 +35,4 @@ const TodoItem = ({ todo, handleRemove, handleUpdateSubmit }: Props) => {
   );
 };
 
-export default TodoItem;
+export default React.memo(TodoItem);

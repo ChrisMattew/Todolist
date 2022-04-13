@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TodoItem from './TodoItem';
+import { Title } from './Title';
 import './style.css';
 
 const getRandomKey = () => {
   return (Math.random() + 1).toString(36).substring(7);
 };
 
-const TodoList = () => {
+export const TodoList = () => {
   const [note, setNote] = useState('');
   const [list, setList] = useState([]);
   const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    console.log('useEffect TodoList', filter);
+  }, [filter, note]);
 
   const handleRemove = (key: string) => {
     setList(list.filter((note) => note.key !== key));
@@ -18,6 +23,7 @@ const TodoList = () => {
   const handleChange = (event) => {
     setNote(event.target.value);
   };
+
   const handleSubmit = () => {
     if (note.trim())
       setList(list.concat({ name: note.trim(), key: getRandomKey() }));
@@ -32,9 +38,9 @@ const TodoList = () => {
       list.map((note) => (note.key === key ? { ...note, name: content } : note))
     );
   };
-  const createTodos = () => {
-    return;
-  };
+
+  console.log('render TodoList');
+
   return (
     <div
       style={{
@@ -43,6 +49,7 @@ const TodoList = () => {
         width: 500,
       }}
     >
+      <Title filter={filter} />
       <div style={{ display: 'flex', gap: 10 }}>
         <label>Add</label>
         <input type="text" value={note} onChange={handleChange} />
