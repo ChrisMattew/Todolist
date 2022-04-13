@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import TodoItem, { getRandomKey } from './TodoItem';
+import TodoItem from './TodoItem';
+import './style.css';
+
+const getRandomKey = () => {
+  return (Math.random() + 1).toString(36).substring(7);
+};
 
 const TodoList = () => {
   const [note, setNote] = useState('');
@@ -7,9 +12,7 @@ const TodoList = () => {
   const [filter, setFilter] = useState('');
 
   const handleRemove = (key: string) => {
-    const newList = list.filter((note) => note.key !== key);
-
-    setList(newList);
+    setList(list.filter((note) => note.key !== key));
   };
 
   const handleChange = (event) => {
@@ -24,12 +27,13 @@ const TodoList = () => {
   const handleFilter = (e) => {
     setFilter(e.target.value);
   };
+  const handleUpdateSubmit = (content, key) => {
+    setList(
+      list.map((note) => (note.key === key ? { ...note, name: content } : note))
+    );
+  };
   const createTodos = () => {
-    return list
-      .filter(({ name }) => name.includes(filter))
-      .map((todo) => {
-        return <TodoItem todo={todo} handleRemove={handleRemove} />;
-      });
+    return;
   };
   return (
     <div
@@ -46,24 +50,27 @@ const TodoList = () => {
         <input type="search" value={filter} onChange={handleFilter} />
       </div>
       <div style={{ display: 'flex', gap: 10 }}>
-        <button
-          style={{
-            marginTop: 20,
-            marginBottom: 20,
-            width: 100,
-            height: 30,
-            borderRadius: 50,
-            background: 'dodgerblue',
-            border: 'none',
-            color: '#fff',
-            cursor: 'pointer',
-          }}
-          onClick={handleSubmit}
-        >
+        <button className="btn" onClick={handleSubmit}>
           Add
         </button>
+        <button className="btn" onClick={() => console.log(list)}>
+          Export
+        </button>
       </div>
-      <div>{createTodos()}</div>
+      <div>
+        {list
+          .filter(({ name }) => name.includes(filter))
+          .map((todo) => {
+            return (
+              <TodoItem
+                key={todo.key}
+                todo={todo}
+                handleUpdateSubmit={handleUpdateSubmit}
+                handleRemove={handleRemove}
+              />
+            );
+          })}
+      </div>
     </div>
   );
 };

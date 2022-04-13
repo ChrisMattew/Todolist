@@ -1,29 +1,36 @@
 import React, { useState } from 'react';
-import {} from './TodoList';
+import './style.css';
 
 type Props = {
   todo: { name: string; key: string };
   handleRemove: (key: string) => void;
+  handleUpdateSubmit: (content: string, key: string) => void;
 };
-const TodoItem = ({ todo, handleRemove }: Props) => {
+const TodoItem = ({ todo, handleRemove, handleUpdateSubmit }: Props) => {
   const [content, setContent] = useState(todo.name);
 
-  const handleEditChange = (event) => {
+  const handleUpdateChange = (event) => {
     setContent(event.target.value);
   };
-  const handleEditSubmit = (key) => {
-    // const editedList = list.map((note) => {
-    //   return note.key === key && editedNote.trim()
-    //     ? { ...note, name: editedNote.trim() }
-    //     : note;
-    // });
-    // setEditedNote('');
+  const handleUndoChanges = () => {
+    setContent(todo.name);
   };
+
   return (
-    <div key={todo.key} style={{ marginBottom: 5, display: 'flex', gap: 5 }}>
-      <input id={todo.key} value={todo.name} onChange={handleEditChange} />
-      <button onClick={() => handleRemove(todo.key)}>Delete</button>
-      <button onClick={() => handleEditSubmit(todo.key)}>Edit</button>
+    <div style={{ marginBottom: 5, display: 'flex', gap: 5 }}>
+      <input id={todo.key} value={content} onChange={handleUpdateChange} />
+      <button className="todo-btns" onClick={() => handleRemove(todo.key)}>
+        Delete
+      </button>
+      <button className="todo-btns" onClick={handleUndoChanges}>
+        Cancel
+      </button>
+      <button
+        className="todo-btns"
+        onClick={() => handleUpdateSubmit(content, todo.key)}
+      >
+        Update
+      </button>
     </div>
   );
 };
