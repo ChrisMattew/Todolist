@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import {} from './TodoList';
 
-export const getRandomKey = () => {
-  return (Math.random() + 1).toString(36).substring(7);
-};
 type Props = {
   todo: { name: string; key: string };
-  handleEditChange: () => void;
-  handleRemove: () => void;
-  handleEditSubmit: () => void;
+  handleRemove: (key: string) => void;
 };
-const TodoItem = ({
-  todo,
-  handleEditSubmit,
-  handleEditChange,
-  handleRemove,
-}: Props) => {
+const TodoItem = ({ todo, handleRemove }: Props) => {
+  const [content, setContent] = useState(todo.name);
+
+  const handleEditChange = (event) => {
+    setContent(event.target.value);
+  };
+  const handleEditSubmit = (key) => {
+    // const editedList = list.map((note) => {
+    //   return note.key === key && editedNote.trim()
+    //     ? { ...note, name: editedNote.trim() }
+    //     : note;
+    // });
+    // setEditedNote('');
+  };
   return (
     <div key={todo.key} style={{ marginBottom: 5, display: 'flex', gap: 5 }}>
       <input id={todo.key} value={todo.name} onChange={handleEditChange} />

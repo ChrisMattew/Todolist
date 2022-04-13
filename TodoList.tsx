@@ -5,11 +5,6 @@ const TodoList = () => {
   const [note, setNote] = useState('');
   const [list, setList] = useState([]);
   const [filter, setFilter] = useState('');
-  const [editedNote, setEditedNote] = useState('');
-
-  const handleEditChange = (event) => {
-    setEditedNote(event.target.value);
-  };
 
   const handleRemove = (key: string) => {
     const newList = list.filter((note) => note.key !== key);
@@ -17,15 +12,6 @@ const TodoList = () => {
     setList(newList);
   };
 
-  const handleEditSubmit = (key) => {
-    const editedList = list.map((note) => {
-      return note.key === key && editedNote.trim()
-        ? { ...note, name: editedNote.trim() }
-        : note;
-    });
-    setList(editedList);
-    setEditedNote('');
-  };
   const handleChange = (event) => {
     setNote(event.target.value);
   };
@@ -42,14 +28,7 @@ const TodoList = () => {
     return list
       .filter(({ name }) => name.includes(filter))
       .map((todo) => {
-        return (
-          <TodoItem
-            todo={todo}
-            handleEditChange={() => handleEditChange}
-            handleEditSubmit={() => handleEditSubmit}
-            handleRemove={() => handleRemove}
-          />
-        );
+        return <TodoItem todo={todo} handleRemove={handleRemove} />;
       });
   };
   return (
