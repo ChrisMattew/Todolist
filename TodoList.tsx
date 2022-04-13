@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Todoitem from './TodoItem';
+import TodoItem, { getRandomKey } from './TodoItem';
 
 const TodoList = () => {
   const [note, setNote] = useState('');
@@ -7,27 +7,51 @@ const TodoList = () => {
   const [filter, setFilter] = useState('');
   const [editedNote, setEditedNote] = useState('');
 
+  const handleEditChange = (event) => {
+    setEditedNote(event.target.value);
+  };
+
+  const handleRemove = (key: string) => {
+    const newList = list.filter((note) => note.key !== key);
+
+    setList(newList);
+  };
+
+  const handleEditSubmit = (key) => {
+    const editedList = list.map((note) => {
+      return note.key === key && editedNote.trim()
+        ? { ...note, name: editedNote.trim() }
+        : note;
+    });
+    setList(editedList);
+    setEditedNote('');
+  };
+  const handleChange = (event) => {
+    setNote(event.target.value);
+  };
+  const handleSubmit = () => {
+    if (note.trim())
+      setList(list.concat({ name: note.trim(), key: getRandomKey() }));
+
+    setNote('');
+  };
+  const handleFilter = (e) => {
+    setFilter(e.target.value);
+  };
   const createTodos = () => {
     return list
       .filter(({ name }) => name.includes(filter))
       .map((todo) => {
         return (
-          <div
-            key={todo.key}
-            style={{ marginBottom: 5, display: 'flex', gap: 5 }}
-          >
-            <input
-              id={todo.key}
-              value={todo.name}
-              onChange={handleEditChange}
-            />
-            <button onClick={() => handleRemove(todo.key)}>Delete</button>
-            <button onClick={() => handleEditSubmit(todo.key)}>Edit</button>
-          </div>
+          <TodoItem
+            todo={todo}
+            handleEditChange={() => handleEditChange}
+            handleEditSubmit={() => handleEditSubmit}
+            handleRemove={() => handleRemove}
+          />
         );
       });
   };
-
   return (
     <div
       style={{

@@ -1,45 +1,28 @@
 import React, { useState } from 'react';
-import TodoList from './TodoList';
+import {} from './TodoList';
 
 export const getRandomKey = () => {
   return (Math.random() + 1).toString(36).substring(7);
 };
-
-const TodoItem = () => {
-  const handleChange = (event) => {
-    setNote(event.target.value);
-  };
-
-  const handleEditChange = (event) => {
-    setEditedNote(event.target.value);
-  };
-
-  const handleSubmit = () => {
-    if (note.trim())
-      setList(list.concat({ name: note.trim(), key: getRandomKey() }));
-
-    setNote('');
-  };
-
-  const handleRemove = (key: string) => {
-    const newList = list.filter((note) => note.key !== key);
-
-    setList(newList);
-  };
-
-  const handleEditSubmit = (key) => {
-    const editedList = list.map((note) => {
-      return note.key === key && editedNote.trim()
-        ? { ...note, name: editedNote.trim() }
-        : note;
-    });
-    setList(editedList);
-    setEditedNote('');
-  };
-  const handleFilter = (e) => {
-    setFilter(e.target.value);
-  };
-  return <div></div>;
+type Props = {
+  todo: { name: string; key: string };
+  handleEditChange: () => void;
+  handleRemove: () => void;
+  handleEditSubmit: () => void;
+};
+const TodoItem = ({
+  todo,
+  handleEditSubmit,
+  handleEditChange,
+  handleRemove,
+}: Props) => {
+  return (
+    <div key={todo.key} style={{ marginBottom: 5, display: 'flex', gap: 5 }}>
+      <input id={todo.key} value={todo.name} onChange={handleEditChange} />
+      <button onClick={() => handleRemove(todo.key)}>Delete</button>
+      <button onClick={() => handleEditSubmit(todo.key)}>Edit</button>
+    </div>
+  );
 };
 
 export default TodoItem;
