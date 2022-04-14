@@ -1,6 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
+import { css } from 'styled-components';
+import RingLoader from 'react-spinners/RingLoader';
 
-const Loading = () => {
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
+
+type Props = {
+  children: ReactNode;
+};
+
+const Loading = ({ children }: Props) => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
@@ -11,21 +23,20 @@ const Loading = () => {
 
   return (
     <div>
-      {loading && (
+      {loading ? (
         <div
           style={{
             display: 'flex',
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            justifyContent: 'center',
+            justifiContent: 'center',
             alignItems: 'center',
+            height: '100vh',
+            width: '100vw',
           }}
         >
-          ...Loading
+          <RingLoader loading={loading} css={override} size={15} />
         </div>
+      ) : (
+        children
       )}
     </div>
   );
